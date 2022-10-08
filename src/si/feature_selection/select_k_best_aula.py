@@ -1,4 +1,5 @@
 #não terminado
+import numpy as np
 
 class SelectBest:
     def __init__(self, score_func, k):
@@ -12,7 +13,7 @@ class SelectBest:
         return self
 
     def transform(self, dataset):
-        idxs = np.argsort(self.F)
+        #idxs = np.argsort(self.F)
         #retorna por ordem crescente os indexes do F
         #se o quinto valor fosse o mais baixo, no inicio retorna-me a posição quatro e assim adiante
         #de seguida, vou buscar as 10 melhores

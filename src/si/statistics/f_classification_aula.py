@@ -1,5 +1,5 @@
 #não completo
-import numpy as np
+#import numpy as np
 from scipy import stats
 #from - falta um
 
