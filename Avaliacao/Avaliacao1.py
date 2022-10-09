@@ -55,7 +55,7 @@ print(new_arr)
 print(len(new_arr))
 
 
-#2
+#2 - tentativa para testar os métodos do exercicio2
 data2 = read_csv("C:/Users/sonia/SIB/datasets/iris_missing_data.csv", sep=',', features=True, label=False)
 #tamanho do dataset original
 sh = data2.shape()
