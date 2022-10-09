@@ -53,3 +53,16 @@ print("New array - Iris-setosa")
 print(new_arr)
 #quantas amostras obténs?
 print(len(new_arr))
+
+
+#2
+data2 = read_csv("C:/Users/sonia/SIB/datasets/iris_missing_data.csv", sep=',', features=True, label=False)
+#tamanho do dataset original
+sh = data2.shape()
+print(sh)
+#retirar os NAs
+remove_na = data2.dropna()
+sa = data2.shape()
+print(sa)
+
+

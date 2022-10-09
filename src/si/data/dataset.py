@@ -1,4 +1,4 @@
-#copyright: Fernando Cruz
+#copyright: Fernando Cruz and Sónia Carvalho (métodos dropna e fillna)
 
 from typing import Tuple, Sequence
 
@@ -127,6 +127,24 @@ class Dataset:
         }
         return pd.DataFrame.from_dict(data, orient="index", columns=self.features)
 
+    def dropna(self): #NÃO FUNCIONA
+        """
+        Removes all the samples that have at least a "null" value (NaN).
+        """
+        indexList = [np.any(i) for i in np.isnan(self.X)]
+        self.X = np.delete(self.X, indexList, axis=0)
+        if self.y is not None:
+            self.y = np.delete(self.y, indexList, axis=0)
+
+
+    def fillna(self, value): #NÃO FUNCIONA
+        """
+        Replaces "null" values (NaN) by another value given by the user.
+        """
+        self.X[np.isnan(self.X)] = value
+        #apenas contempla alteração para variaveis independentes
+
+
     @classmethod
     def from_dataframe(cls, df: pd.DataFrame, label: str = None):
         """
@@ -193,3 +211,4 @@ class Dataset:
         X = np.random.rand(n_samples, n_features)
         y = np.random.randint(0, n_classes, n_samples)
         return cls(X, y, features=features, label=label)
+
