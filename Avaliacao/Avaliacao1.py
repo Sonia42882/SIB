@@ -46,12 +46,10 @@ print(means)
 
 #1.5
 #seleciona todas as amostras com a classe/label igual a ‘Iris-setosa’
+arr = data.X
+mask_setosa = (data.X[:,-1]=="Iris-setosa")
+new_arr = arr[mask_setosa]
+print("New array - Iris-setosa")
+print(new_arr)
 #quantas amostras obténs?
-
-#setosa = data.X.loc[[(data.X[:-1]=="Iris-setosa")]
-#print(setosa)
-#print(len(setosa))
-
-
-#setosa = data.X[(data.X['class']=='Iris-setosa')]
-#print(setosa)
+print(len(new_arr))
