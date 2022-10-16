@@ -56,7 +56,7 @@ print(len(new_arr))
 
 
 #2 - tentativa para testar os métodos do exercicio2
-data2 = read_csv("C:/Users/sonia/SIB/datasets/iris_missing_data.csv", sep=',', features=True, label=False)
+data2 = read_csv("C:/Users/sonia/SIB/datasets/iris_missing_data.csv", sep=',', features=True, label=True)
 #tamanho do dataset original
 sh = data2.shape()
 print(sh)
@@ -65,4 +65,9 @@ remove_na = data2.dropna()
 sa = data2.shape()
 print(sa)
 
-
+print("sonia")
+data3 = read_csv("C:/Users/sonia/SIB/datasets/iris_missing_data.csv", sep=',', features=True, label=True)
+print(data3.summary())
+#substituir NA por valor
+fn = data3.fillna(value = 100000)
+print(data3.summary())
