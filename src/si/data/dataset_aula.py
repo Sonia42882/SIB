@@ -79,8 +79,3 @@
 #     print(dataset.has_label())
 #     print(dataset.get_classes())
 #
-#
-#
-#
-#
-#

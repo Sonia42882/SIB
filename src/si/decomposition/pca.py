@@ -34,10 +34,3 @@ class PCA:
         dados_centrados = dataset.X - self.mean
 
         #calcula o X reduzido - NÃO PERCEBI
-
-
-
-
-
-
-

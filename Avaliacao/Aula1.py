@@ -71,3 +71,4 @@ print(data3.summary())
 #substituir NA por valor
 fn = data3.fillna(value = 100000)
 print(data3.summary())
+

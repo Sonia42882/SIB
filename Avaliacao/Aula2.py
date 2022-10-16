@@ -11,9 +11,3 @@ percent = SelectPercentile(f_classification, 10)
 sol = percent.fit_transform(data)
 #print(sol.X)
 print(sol.shape())
-
-
-
-
-
-

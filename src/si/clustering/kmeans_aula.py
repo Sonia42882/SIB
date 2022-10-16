@@ -34,19 +34,3 @@ class Kmeans:
 
     convergence = False
     i = 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
