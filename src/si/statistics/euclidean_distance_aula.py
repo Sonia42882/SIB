@@ -10,6 +10,3 @@ import numpy as np
 - array com distância entre X e as várias amostras de Y
 """
     return np.sqrt((x - y)**2)).sum(axis=1)
-
-
-
