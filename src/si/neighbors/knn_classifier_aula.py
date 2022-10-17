@@ -40,3 +40,11 @@ class KNNClassifier:
         #chamo o predict neste dataset
         predictions = self.predict(dataset)
         return accuracy(dataset.y, predictions)
+
+
+#avaliação - semelhantes mas para regressão (e não classificação)
+#accuracy é apenas para classes
+#distancia pode ser euclidean distance (dá para classificação e regressão)
+#iris é classificação, cpu é regressão
+#no ponto4, calculava a classe mais comum, aqui vamos usar a média, vamos ter valores continuos
+#
