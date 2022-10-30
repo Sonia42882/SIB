@@ -1,6 +1,6 @@
 import numpy as np
 from ..data.dataset import Dataset
-from ..metrics.rmse import rmse
+from ..metrics.mse_aula import rmse
 from ..statistics.euclidean_distance import euclidean_distance
 from ..model_selection.split import train_test_split
 
