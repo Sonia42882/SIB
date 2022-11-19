@@ -25,7 +25,7 @@ class Dataset:
             raise ValueError("X cannot be None")
 
         if features is None:
-            features = [str(i) for i in range(X.shape[1])]
+            features = [str(i) for i in range(X.shape[1])] #enumera ID das features (1,2,etc) e converte em str
         else:
             features = list(features)
 
@@ -141,12 +141,7 @@ class Dataset:
         """
         Replaces "null" values (NaN) by another value given by the user.
         """
-        self.X[np.isnan(self.X)] = value
-        #apenas contempla alteração para variaveis independentes
-
-
-
-
+        self.X = np.nan_to_num(self.X, nan=value)
 
 
 
