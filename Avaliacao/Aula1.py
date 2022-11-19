@@ -5,7 +5,7 @@ from src.si.data.dataset import Dataset
 
 #1.1
 #carregar ficheiro iris
-data = read_csv("C:/Users/sonia/SIB/datasets/iris.csv", sep=',', features=True, label=False)
+data = read_csv("C:/Users/sonia/SIB/datasets/iris.csv", sep=',', features=True, label=True)
 
 
 #1.2

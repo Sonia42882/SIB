@@ -4,10 +4,10 @@ from si.data.dataset import Dataset
 from si.io.csv import read_csv
 from si.statistics.f_classification import f_classification
 
-#Testar a class SelectPercentile usando o dataset cpu.csv
-data = read_csv("C:/Users/sonia/SIB/datasets/cpu.csv", sep=',', features=True, label=True)
-print(data.shape())
-percent = SelectPercentile(f_classification, 10)
-sol = percent.fit_transform(data)
-#print(sol.X)
-print(sol.shape())
+#Testar a class SelectPercentile usando o dataset iris
+iris = read_csv("C:/Users/sonia/SIB/datasets/iris.csv", sep=',', features=True, label=True)
+print(iris.shape())
+percent = SelectPercentile(f_classification, 20)
+percent.fit(iris)
+transformed_iris = percent.transform(iris)
+print(transformed_iris.shape())
