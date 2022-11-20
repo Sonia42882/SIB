@@ -33,4 +33,4 @@ class PCA:
         self.mean = np.mean(dataset.X, axis=0)
         dados_centrados = dataset.X - self.mean
 
-        #calcula o X reduzido - NÃO PERCEBI
+        #calcula o X reduzido - NÃO PERCEBI BEM
