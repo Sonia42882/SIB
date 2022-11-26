@@ -1,27 +1,50 @@
-#incorporar no restante código, apenas codigo com algumas ideias
-#6.1
-self.cost_history = {}
+from src.si.data.dataset import Dataset
+from si.io.csv import read_csv
+from si.linear_model.ridge_regression import RidgeRegression
+from si.linear_model.logistic_regression import LogisticRegression
+from si.model_selection.split import train_test_split
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
-#depois do gradiente descent
-custo = self.cost(dataset)
-self.cost_history[i] = custo
+
+#exercicio 6.2
+#testar para os dataset cpu
+cpu_dataset = read_csv('../datasets/cpu.csv', features=True, label=True)
+#standardization
+cpu_dataset.X = StandardScaler().fit_transform(cpu_dataset.X)
+#split dataset
+train_dataset, test_dataset = train_test_split(cpu_dataset)
+#logistic regression
+rg = RidgeRegression(max_iter=2000)
+rg.fit(train_dataset)
+rg.predict(train_dataset)
+rg.score(train_dataset)
+rg.cost(train_dataset)
+#graph
+rg.line_plot()
 
 
-#6.2 (grafico)
-def line_plot(self):
+#testar para os dataset breast
+breast_dataset = read_csv('../datasets/breast-bin.csv', features=True, label=True)
+#standardization
+breast_dataset.X = StandardScaler().fit_transform(breast_dataset.X)
+#split dataset
+train_dataset, test_dataset = train_test_split(breast_dataset)
+#logistic regression
+lg = LogisticRegression(max_iter=2000)
+lg.fit(train_dataset)
+lg.predict(train_dataset)
+lg.score(train_dataset)
+lg.cost(train_dataset)
+#graph
+lg.line_plot()
 
-    Xiteracoes = list(self.cost_history.keys())
-    Ycost = list(self.cost_history.values())
-    plt.plot(Xiteracoes, Ycost, '-')
 
-    return plt.show()
-#testar para os datasets cpu e breast
+#exercicio 6.4
+#TESTAR FUNÇÃO OPCIONAL COM ADAPTIVE
 
-#6.3
-if np.abs(self.cost_history.get(i - 1) - custo) >= 1: #alterar valor para logistic regression
-    self.history[i] = custo
-else:
-    break
-#testar para os datasets cpu e breast
 
-#6.4 (opcional)
+
+
+
+

@@ -1,6 +1,7 @@
-#Copyright: Fernando Cruz
+#Copyright: Fernando Cruz (and Sonia Carvalho)
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from si.data.dataset import Dataset
 from si.metrics.accuracy import accuracy
@@ -27,7 +28,7 @@ class LogisticRegression:
     theta_zero: float
         The intercept of the logistic model
     """
-    def __init__(self, l2_penalty: float = 1, alpha: float = 0.001, max_iter: int = 1000):
+    def __init__(self, l2_penalty: float = 1, alpha: float = 0.001, max_iter: int = 1000, use_adaptive_alpha: bool = False):
         """
         Parameters
         ----------
@@ -37,19 +38,32 @@ class LogisticRegression:
             The learning rate
         max_iter: int
             The maximum number of iterations
+        use_adaptive_alpha: bool
+            Characterizes the type of model fitting
         """
         # parameters
         self.l2_penalty = l2_penalty
         self.alpha = alpha
         self.max_iter = max_iter
+        self.use_adaptive_alpha = use_adaptive_alpha
 
         # attributes
         self.theta = None
         self.theta_zero = None
+        self.cost_history = {}
 
-    def fit(self, dataset: Dataset) -> 'LogisticRegression':
+    def fit(self, dataset: Dataset):
         """
-        Fit the model to the dataset
+        Fit the model to the dataset, according to the user's preference on regular or adaptive fit
+        """
+        if self.use_adaptive_alpha is True:
+            self._adaptive_fit(dataset)
+        elif self.use_adaptive_alpha is False:
+            self._regular_fit(dataset)
+
+    def _regular_fit(self, dataset: Dataset) -> 'LogisticRegression':
+        """
+        Fit the model to the dataset (regular fit)
         Parameters
         ----------
         dataset: Dataset
@@ -83,6 +97,59 @@ class LogisticRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
 
+            #exercicio 6.1 - updating cost_history dictionary (key=iteration nr, value = cost)
+            custo = self.cost(dataset)
+            self.cost_history[i] = custo
+
+            #exercicio 6.3 - confirmar
+            if i > 0:
+                if np.abs(self.cost_history[i - 1] - self.cost_history[i]) < 0.0001:
+                    break
+        return self
+
+    def _adaptive_fit(self, dataset: Dataset) -> 'RidgeRegression':
+        """
+        Fit the model to the dataset (adaptive fit)
+
+        Parameters
+        ----------
+        dataset: Dataset
+            The dataset to fit the model to
+
+        Returns
+        -------
+        self: RidgeRegression
+            The fitted model
+        """
+        m, n = dataset.shape()
+
+        # initialize the model parameters
+        self.theta = np.zeros(n)
+        self.theta_zero = 0
+
+        # gradient descent
+        for i in range(self.max_iter):
+            # predicted y
+            y_pred = np.dot(dataset.X, self.theta) + self.theta_zero
+
+            # computing and updating the gradient with the learning rate
+            gradient = (self.alpha * (1 / m)) * np.dot(y_pred - dataset.y, dataset.X)
+
+            # computing the penalty
+            penalization_term = self.alpha * (self.l2_penalty / m) * self.theta
+
+            # updating the model parameters
+            self.theta = self.theta - gradient - penalization_term
+            self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
+
+            #updating cost_history dictionary (key=iteration nr, value = cost)
+            custo = self.cost(dataset)
+            self.cost_history[i] = custo
+
+            #updating alpha value if cost doesnt change
+            if i > 0:
+                if np.abs(self.cost_history[i - 1] - self.cost_history[i]) < 1:
+                    self.alfa = self.alfa / 2
         return self
 
     def predict(self, dataset: Dataset) -> np.array:
@@ -137,6 +204,13 @@ class LogisticRegression:
         cost = np.sum(cost) / dataset.shape()[0]
         cost = cost + (self.l2_penalty * np.sum(self.theta ** 2) / (2 * dataset.shape()[0]))
         return cost
+
+    #exercicio 6.2
+    def line_plot(self):
+        Xiteracoes = list(self.cost_history.keys())
+        Ycost = list(self.cost_history.values())
+        plt.plot(Xiteracoes, Ycost, '-')
+        return plt.show()
 
 
 if __name__ == '__main__':
