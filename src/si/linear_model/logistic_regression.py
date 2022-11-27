@@ -149,7 +149,7 @@ class LogisticRegression:
             #updating alpha value if cost doesnt change
             if i > 0:
                 if np.abs(self.cost_history[i - 1] - self.cost_history[i]) < 1:
-                    self.alfa = self.alfa / 2
+                    self.alpha = self.alpha / 2
         return self
 
     def predict(self, dataset: Dataset) -> np.array:

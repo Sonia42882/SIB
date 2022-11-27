@@ -1,4 +1,4 @@
-Copyright: Fernando Cruz
+#Copyright: Fernando Cruz
 
 from typing import Callable, Union
 
