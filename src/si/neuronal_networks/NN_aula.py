@@ -55,3 +55,53 @@ class NN:
 #ultimo deve acabar com uma ativação linear, nos não demos aqui nenhuma layer de activação linear
 #considerem o que é um modelo linear, como implementar forward de todas as nossas layers
 
+#AULA 28.11
+#aceita uma função que vai calcular, por ex
+#soma dos quadrados dos erros ou outra
+#ou podem adicionar metrica de erro por defeito (a mse)
+#mais argumentos para o init?
+#duvidas na lost function?
+#fx em python são objetos
+
+#def __init__(self, layers, epochs, learning_rate, loss, loss_derivate, verbose)
+#atributos: self.history #guardo resultados (custo, erro ou outra coisa qualquer, diferença previstos / reais) para cada epoch
+
+#o fit até agora fazia o backward propagation
+#para cada layer, recebo na primeira o dataset de treino com features e exemplos
+#passo à primeira layer, faz forward e no forward o que tinhamos implementado?
+#substituimos o x para passar ao seguinte
+
+#no backward propagation, espero que o forward acabe e depois? calculo o custo e alteramos os pesos anteriores
+#nenhuma das nossas layers tem backward propagation
+#fazemos isso quantas vezes? andar para frente, vejo o erro, ando para tras ---- nr de epochs que quero
+#ciclo for com nr de epochs for epoch in range(1, self.epochs = 1)
+#antes eu extraio o x e o y, mas só por conveniência, podia usar dataset.X e dataset.Y ao longo do algoritmo
+
+#primeira iteraçao, primeiro passo é forward propagation (esta parte já tinhamos), o que fazemos a seguir?
+#calculamos o custo e fazemos a backward propagation
+#temos que usar a derivada da lost function
+#para calcular o erro ou os pesos e atualizar e fazer backward propagation, tenho que fazer fx composta e derivar isso
+#vamos lá na próxima aula
+#depois vamos pegar no erro para cada exemplo e vamos passá-lo ao nosso backward
+
+#esta diferença entre previstos e reais, usamos para atualizar os nossos pesos
+#se usassemos so a loss, obtinhamos um float
+#a nossa loss derivate vai dar para exemplo a diferença
+
+#calculamos o erro, pego na ultima layer, invertemos a nossa lista de layers, pego na ultima e chamo o nosso backward erro e self.learning rate
+#temos que ir a todas as layers e adicionar o nosso backward
+#neste momento só diz para retornar o erro, porque vamos implementar isso na próxima aula
+
+#por ultimo, o que fazemos? calculamos o verdadeiro custo a cada iteração
+#mas daqui para baixo isto já nao importa para o treino, é só para perceber se estou a chegar ao minimom global nas primeiras 100 iterações
+#depois posso otimização o nr de epochs se vir que o erro nao se atualiza ao fim de 300, por exemplo, e assim poupo recursos ao meu computador
+
+#para aquela epoch guardo no meu dicionário - o que vai ter, por exemplo, na primeira iteração?
+#vai ter 1 e um valor de 0,78, por exemplo
+
+#por ultimo self.verbose e simplesmente faço um print para ter um nice output (isto é secundário)
+
+#predict novamente
+
+#esta avaliação fica para a próxima aula
+
