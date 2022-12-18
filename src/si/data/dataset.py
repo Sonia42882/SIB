@@ -1,4 +1,4 @@
-#copyright: Fernando Cruz and Sónia Carvalho (métodos dropna e fillna - exercício 2)
+#copyright: Fernando Cruz and Sónia Carvalho (métodos dropna e fillna - exercício2/avaliação aula1)
 
 from typing import Tuple, Sequence
 
