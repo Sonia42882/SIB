@@ -137,9 +137,14 @@ class Dataset:
             self.y = np.delete(self.y, indexList, axis=0)
 
 
-    def fillna(self, value): #exercise 2 by Sonia
+    def fillna(self, value: float): #exercise 2 by Sonia
         """
         Replaces "null" values (NaN) by another value given by the user.
+
+        Parameters
+        ----------
+        value: float
+            the value that will replace "null" values (NaN)
         """
         self.X = np.nan_to_num(self.X, nan=value)
 
