@@ -24,6 +24,7 @@ class SelectPercentile:
     p: array, shape (n_features,)
         p-values of F-scores.
     """
+
     def __init__(self, score_func: Callable = f_classification, percentile: float):
         """
         Select features according to a percentile chosen by the user.
