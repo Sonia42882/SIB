@@ -47,15 +47,14 @@ class PCA:
         dados_centrados = dataset.X - self.mean
 
         #calcula o SVD de X
-        U, S, VT = numpy.linalg.svd(X, full_matrices=False)
-        SVD = U * S * VT
+        U, S, VT = np.linalg.svd(dados_centrados, full_matrices=False)
 
         #infere os componentes principais
         self.components = VT[:self.n_components]
 
         #infere a variância explicada
         n = dataset.shape()[0]
-        EV = (SVD ** 2) / (n - 1)
+        EV = (S ** 2) / (n - 1)
         self.explained_variance = EV[:self.n_components]
         return self
 
@@ -66,6 +65,7 @@ class PCA:
         ----------
         dataset: Dataset
             Dataset object.
+
         Returns
         -------
         np.ndarray
@@ -75,4 +75,14 @@ class PCA:
         self.mean = np.mean(dataset.X, axis=0)
         dados_centrados = dataset.X - self.mean
 
-        #calcula o X reduzido - NÃO PERCEBI BEM
+        #calcula o SVD de X
+        U, S, VT = np.linalg.svd(dados_centrados, full_matrices=False)
+
+        #V é transposta de VT
+        V = VT.T
+
+        #Calcula o X reduzido
+        x_reduzido = np.dot(dados_centrados, V)
+        return x_reduzido
+
+
