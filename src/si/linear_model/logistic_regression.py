@@ -101,9 +101,9 @@ class LogisticRegression:
             custo = self.cost(dataset)
             self.cost_history[i] = custo
 
-            #exercicio 6.3 - confirmar
+            #exercicio 6.3
             if i > 0:
-                if np.abs(self.cost_history[i - 1] - self.cost_history[i]) < 0.0001:
+                if self.cost_history[i - 1] - self.cost_history[i] < 0.0001:
                     break
         return self
 
@@ -148,7 +148,7 @@ class LogisticRegression:
 
             #updating alpha value if cost doesnt change
             if i > 0:
-                if np.abs(self.cost_history[i - 1] - self.cost_history[i]) < 1:
+                if (self.cost_history[i - 1] - self.cost_history[i]) < 0.0001:
                     self.alpha = self.alpha / 2
         return self
 
@@ -207,6 +207,9 @@ class LogisticRegression:
 
     #exercicio 6.2
     def line_plot(self):
+        """
+        Returns a plot to visualize the cost history according to the number of iterations.
+        """
         Xiteracoes = list(self.cost_history.keys())
         Ycost = list(self.cost_history.values())
         plt.plot(Xiteracoes, Ycost, '-')
