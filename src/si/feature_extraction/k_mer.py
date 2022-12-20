@@ -13,24 +13,33 @@ class KMer:
     Parameters
     ----------
     k : int
-        The k-mer length.
+        The k-mer length
+    sequence: str
+        The type of biological sequence (e.g., DNA or AA)
     Attributes
     ----------
+    alphabet: str
+        The alphabet of the biological sequence
     k_mers : list of str
         The k-mers.
     """
-    def __init__(self, k: int = 2, alphabet: str = "ACTG"):
+    def __init__(self, k: int = 2, sequence: str = "DNA"):
         """
         Parameters
         ----------
         k : int
             The k-mer length
-        alphabet: str
-            The alphabet of the biological sequence.
+        sequence: str
+            The type of biological sequence (e.g., DNA or AA)
         """
         # parameters
         self.k = k
-        self.alphabet = alphabet
+        self.sequence = sequence
+
+        if self.sequence == "DNA":
+            self.alphabet = "ACTG"
+        elif self.sequence == "AA":
+            self.alphabet = "ACDEFGHIKLMNPQRSTVWYXBZJ"
 
         # attributes
         self.k_mers = None
@@ -47,6 +56,7 @@ class KMer:
         KMer
             The fitted descriptor.
         """
+
         # generate the k-mers
         self.k_mers = [''.join(k_mer) for k_mer in itertools.product(self.alphabet, repeat=self.k)]
         return self

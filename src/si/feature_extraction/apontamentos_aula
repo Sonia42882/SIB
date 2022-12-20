@@ -1,6 +1,3 @@
-
-
-
 class KMer:
     def __init__(self, k = 3):
         self.k = k #tamanho da substring
