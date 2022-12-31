@@ -105,7 +105,7 @@ class LogisticRegression:
             if i > 0:
                 if self.cost_history[i - 1] - self.cost_history[i] < 0.0001:
                     break
-        return
+
 
     def _adaptive_fit(self, dataset: Dataset) -> 'RidgeRegression':
         """

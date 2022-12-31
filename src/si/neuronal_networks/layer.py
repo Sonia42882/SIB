@@ -100,7 +100,7 @@ class SigmoidActivation:
         self.X = X
         return 1 / (1 + np.exp(- self.X))
 
-    def backward(self, error: np.ndarray) -> np.ndarray:
+    def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
         """
         Performs a backward pass of the layer.
         Parameters
@@ -171,7 +171,7 @@ class ReLUActivation:
         self.X = X
         return  np.maximum(0, self.X)
 
-    def backward(self, error: np.ndarray): #confirmar
+    def backward(self, error: np.ndarray, learning_rate: float): #confirmar
         """
         Performs a backward pass of the layer.
         Parameters

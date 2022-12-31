@@ -12,8 +12,8 @@ def cross_entropy(y_true: np.ndarray, y_pred: np.ndarray):
         The predicted labels of the dataset
     """
     n = y_true.shape[0]
-    formula = - np.sum((y_true * np.log(y_pred))/ n
-    return
+    #formula = - np.sum((y_true * np.log(y_pred))/ n
+    return - np.sum(y_true * np.log(y_pred))/ n
 
 def cross_entropy_derivative(y_true: np.ndarray, y_pred: np.ndarray):
     """
@@ -28,4 +28,4 @@ def cross_entropy_derivative(y_true: np.ndarray, y_pred: np.ndarray):
     """
     n = y_true.shape[0]
     formula = - (y_true / y_pred) + ((1 - y_true) / (1 - y_pred)) / n
-    return
+    return formula
