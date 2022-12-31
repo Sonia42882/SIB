@@ -217,3 +217,15 @@ class Dataset:
         X = np.random.rand(n_samples, n_features)
         y = np.random.randint(0, n_classes, n_samples)
         return cls(X, y, features=features, label=label)
+
+# if __name__ == '__main__':
+#     x = np.array([[1,2,3], [1,2,3]])
+#     y = np.array([1,2])
+#     features = ["A", "B", "C"]
+#     label = "y"
+#     #dataset = Dataset(X = x, y = y, features=features, label=label)
+#     dataset = Dataset(X = x, y=None, features= features, label = None)
+#     print(dataset.shape())
+#     print(dataset.has_label())
+#     print(dataset.get_classes())
+#

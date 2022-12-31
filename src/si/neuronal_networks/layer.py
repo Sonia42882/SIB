@@ -54,8 +54,22 @@ class Dense:
 
     def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
         """
+        Performs a backward pass of the layer.
+        Parameters
+        ----------
+        error: np.ndarray
+            The error value of the loss function
+        learning_rate: float
+            Learning rate
+        Returns
+        -------
+        output: np.ndarray
+            The error of the previous layer.
         """
-        return error
+        error_to_propagate = np.dot(error, self.weights.T)
+        self.weights -= learning_rate * np.dot(self.X.T, error)
+        self.bias -= learning_rate * np.sum(error, axis=0)
+        return error_to_propagate
 
 
 class SigmoidActivation:
@@ -66,6 +80,51 @@ class SigmoidActivation:
     def __init__(self):
         """
         Initialize the sigmoid activation layer.
+        """
+        self.X = None
+
+
+    def forward(self, X: np.ndarray) -> np.ndarray:
+        """
+        Performs a forward pass of the layer using the given input.
+        Returns a 2d numpy array with shape (1, output_size).
+        Parameters
+        ----------
+        X: np.ndarray
+            The input to the layer.
+        Returns
+        -------
+        output: np.ndarray
+            The output of the layer.
+        """
+        self.X = X
+        return 1 / (1 + np.exp(- self.X))
+
+    def backward(self, error: np.ndarray) -> np.ndarray:
+        """
+        Performs a backward pass of the layer.
+        Parameters
+        ----------
+        error: np.ndarray
+            The error value of the loss function
+        Returns
+        -------
+        output: np.ndarray
+            The error of the previous layer.
+        """
+        deriv_sig = (1 / (1 + np.exp(- self.X))) * (1 - (1 / (1 + np.exp(- self.X))))
+        error_to_propagate = error * deriv_sig
+        return error_to_propagate
+
+
+
+class SoftMaxActivation:
+    """
+    A SoftMax activation layer.
+    """
+    def __init__(self):
+        """
+        Initialize the SoftMax activation layer.
         """
         pass
 
@@ -82,39 +141,8 @@ class SigmoidActivation:
         output: np.ndarray
             The output of the layer.
         """
-        return 1 / (1 + np.exp(-X))
-
-    def backward(self, error: np.ndarray, learning_rate: float) -> np.ndarray:
-        """
-        """
-        return error
-
-
-class SoftMaxActivation:
-    """
-    A SoftMax activation layer.
-    """
-    def __init__(self):
-        """
-        Initialize the SoftMax activation layer.
-        """
-        pass
-
-    def forward(self, input_data: np.ndarray) -> np.ndarray:
-        """
-        Performs a forward pass of the layer using the given input.
-        Returns a 2d numpy array with shape (1, output_size).
-        Parameters
-        ----------
-        X: np.ndarray
-            The input to the layer.
-        Returns
-        -------
-        output: np.ndarray
-            The output of the layer.
-        """
-        ezi = np.exp(input_data - np.max(input_data))
-        return (ezi / (np.sum(ezi, axis=1, keepdims=True))
+        ezi = np.exp(X - np.max(X))
+        return ezi / (np.sum(ezi, axis=1, keepdims=True))
 
 
 class ReLUActivation:
@@ -125,9 +153,9 @@ class ReLUActivation:
         """
         Initialize the ReLu activation layer.
         """
-        pass
+        self.X = None
 
-    def forward(self, input_data: np.ndarray) -> np.ndarray:
+    def forward(self, X: np.ndarray) -> np.ndarray:
         """
         Performs a forward pass of the layer using the given input.
         Returns a 2d numpy array with shape (1, output_size).
@@ -140,13 +168,24 @@ class ReLUActivation:
         output: np.ndarray
             The output of the layer.
         """
-        return  np.maximum(0, input_data)
+        self.X = X
+        return  np.maximum(0, self.X)
 
-    def backward(self, input_data: np.ndarray, error: np.ndarray):
+    def backward(self, error: np.ndarray): #confirmar
         """
-        CONFIRMAR
+        Performs a backward pass of the layer.
+        Parameters
+        ----------
+        X: np.ndarray
+            The input data
+        error: np.ndarray
+            The error value of the loss function
+        Returns
+        -------
+        output: np.ndarray
+            The error of the previous layer.
         """
-        relu_b = np.where(input_data > 0, 1, 0)
+        relu_b = np.where(self.X > 0, 1, 0)
         error_to_propagate = error * relu_b
         return error_to_propagate
 
