@@ -26,43 +26,39 @@ def randomized_search_cv(model, dataset: Dataset, parameter_distribution: Dict[s
         The test size
     Returns
     -------
-    scores: List[Dict[str, List[float]]]
+    scores:
         The scores of the model on the dataset.
     """
+
+    scores = {
+        'parameters': [],
+        'seed': [],
+        'train': [],
+        'test': []
+    }
 
     # verificar se parametros fornecidos existem no modelo
     for parameter in parameter_distribution:
         if not hasattr(model, parameter):
             raise AttributeError(f"Model {model} does not have parameter {parameter}.")
 
-    scores = []
-    combinations = []
-
-    # obtém n_iter combinações de parâmetros
+    #  Obtém n_iter combinações de parâmetros
     for i in range(n_iter):
-        parameter_grid = {}
-        for param in parameter_distribution.keys():
-            parameter_grid[param] = np.random.choice(parameter_distribution[param])
-        combinations.append(parameter_grid)
 
-    # for each combination
-    for combination in combinations:
-
-        # parameter configuration
+        random_state = np.random.randint(0, 1000)
+        scores['seed'].append(random_state)
         parameters = {}
+        for parameter, value in parameter_distribution.items():
+            parameters[parameter] = np.random.choice(value)
 
-        # set the parameters
-        for parameter, value in zip(parameter_distribution.keys(), combination):
+        for parameter, value in parameters.items():
             setattr(model, parameter, value)
-            parameters[parameter] = value
 
-        # cross validate the model
+    # cross_validation
         score = cross_validate(model=model, dataset=dataset, scoring=scoring, cv=cv, test_size=test_size)
 
-        # add the parameter configuration
-        score['parameters'] = parameters
-
-        # add the score
-        scores.append(score)
+        scores['parameters'].append(parameters)
+        scores['train'].append(score['train'])
+        scores['test'].append(score['test'])
 
     return scores

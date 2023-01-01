@@ -61,7 +61,7 @@ class LogisticRegression:
         elif self.use_adaptive_alpha is False:
             self._regular_fit(dataset)
 
-    def _regular_fit(self, dataset: Dataset) -> 'LogisticRegression':
+    def _regular_fit(self, dataset: Dataset):
         """
         Fit the model to the dataset (regular fit)
         Parameters
@@ -107,7 +107,7 @@ class LogisticRegression:
                     break
 
 
-    def _adaptive_fit(self, dataset: Dataset) -> 'RidgeRegression':
+    def _adaptive_fit(self, dataset: Dataset):
         """
         Fit the model to the dataset (adaptive fit)
 

@@ -1,0 +1,406 @@
+class KMer:
+    def __init__(self, k = 3):
+        self.k = k #tamanho da substring
+        self.k_mers = None #todos os k-mers possíveis
+        #abordagem - criar dicionário, não iria resultar para todos os casos de estudo
+        #nao ia compreender casos de teste com sequencias que não estavam no treino
+
+        #posso pegar no alfabeto, calcular todas as combinações possíveis e verifico se a sequência está dentro de
+        #todas as combinações possíveis
+        #temos de ter todas as combinações possiveis, se não existirem damos zero
+
+    def fit(self, dataset): #estima todos os k_mers possíveis; retorna o self (ele próprio)
+        #como fazer todas as combinações possíveis? produto cartesiano, itertools tem fx product
+        #iter true itertools.product (array alfabeto, parametro quantas xs quero repetir o array)
+        #REPEAT
+        #o que faço com isto?
+        #itertools vai gerar todas as combinações possíveis
+        #pode ser mais fácil fazer numa lista, não precisamos de guardar as contagens num dicionário
+        #adiciono todas as combinações possíveis numa lista, onde faço isso? no fit? transform?
+        #pode ser logo no init, o fernando no codigo fez no fit, poupa trabalho meter no fit
+
+        # list(itertools.product([A, C, T, G], repeat = self.k)))
+        #cada vez que itero vamos ter tuplo das combinações
+        #infere todas as comninações possiveis de nucleotidos consoante o k
+        #self.k_mers = lista de tuplos com ACG, ATG (porque k=3)
+
+
+    def transform(self): #calcula a frequência normalizada de cada k mer em cada sequência
+        #divide-se quantas vezes aparece o k_mer na sequencia pelo tamanho da sequência
+        #agora crio um dicionário com todas as combinações possiveis que inferi e atribuo contagem zero
+        #à medida que percorrro seq, atualizo a contagem do dicionario
+        #dicio = {}
+        #i = 0, adiciono k=3 e retiro a primeira janela (parecido com o blast simplificado)
+        #atenção, quando chegar ao fim, tenho que iterar sempre para ter k=3
+        counts = {k_mer:0 for k_mer in self.k_mers}
+        for i in range(len(seq) - self.k +1):
+            k_mer = sequence[i:i + self.k]
+            #k_mer é string, k_mers tem tuplos
+            #posso fazer tuplo de k_mer e criar dicionario de tuplos
+            #itertools retorna lista de tuplos com strings, se fizer join ele itera o tuplo e adiciona-o à string
+            #o fernando fez self.k_mers = ["".join ....]
+            counts[k_mer] += 1
+        return np.array([counts[k_mer] / len(sequence) for k_mer in self.k_mers])
+            #separem a lógica em funções para se ler melhor, não façam 3 for loops seguidos
+
+
+    def fit_transform(self): #corre o fit e depois o transform
+        #
+        #return
+
+#AVALIAÇÃO
+#o kmer que fizemos é puramente especifico para nucleotidos
+#se desse seq de proteinas, nao conseguiria calcular nada
+#quero que altero para que possa calcular a composição de sequencia nucleotidica e peptidica
+#adaptar a esta classe que desenvolvemos na aula
+#envolve alterar 2/3 linhas de codigo, mas temos que compreender bem o que é o kmer e o que temos que alterar
+#adicionar um jupyter notebook ou script em que testo
+#fazer protocolo que mostrou, kmer, gerar dataset com variaveis numéricas e usar standard scaler
+#e normal nesse dataset ter piores resultados do que o que ele mostrou
+#nao brinquem com k superiores a 3 - porque?
+#vai demorar imenso tempo
+
+
+#não terminado
+import numpy as np
+
+class SelectBest:
+    def __init__(self, score_func, k):
+        self.score_func = score_func
+        self.k = k
+        self.F = None
+        self.p = None
+
+    def fit(self, dataset):
+        self.F, self.p = self.score_func(dataset)
+        return self
+
+    def transform(self, dataset):
+        #idxs = np.argsort(self.F)
+        #retorna por ordem crescente os indexes do F
+        #se o quinto valor fosse o mais baixo, no inicio retorna-me a posição quatro e assim adiante
+        #de seguida, vou buscar as 10 melhores
+        #como é crescente, vou buscar ao contrário - como faço isso? com menos
+        #começar ao contrário
+        #podemos fazer de outra maneira, o numpy só faz crescente
+        #neste momento não faz mask, dá uma array de indexes
+        #se o k for 10 dá os indices dos F mais novos
+        #retorna um dataset novo
+        #naquele caso fazia mask no caso em que variancia é diferene
+
+#ver upload no github
+#na 3.3 só usamos o iris
+
+
+# #não completo
+#
+# class VarianceThreshold: #retorna um novo dataset onde vamos aplicar a "magia", onde neste caso seleccionamos colunas que interessam
+#     def __init__(self, threshold):
+#         #quais os atributos da classe?
+#         self.threshold = threshold
+#         self.variance = None #para já vazio porque dataset está vazio
+#
+#     def fit(dataset):
+#         #estima / calcula a variância de cada feature; retorna o self
+#         #o nosso dataset é uma estrutura nossa, não é um numpy array
+#        # variance = np.var(dataset.X)
+#         variance = Dataset.get_var() #método da outra aula, é uma alternativa)
+#         self.variance = variance
+#         return self #retorna-se a ele próprio, assim dá para fazer códigos numa linha
+#     #é uma API do transformer, ignorem por agora os motivos
+#
+#     def transform(dataset):
+#         #selecciona todas as features com variância superior ao threshold e retorna o X seleccionado
+#         mask = self.vaiance > self.threshold
+#         novoX = dataset.X[:,mask]
+#         #podemos fazer selecção com booleanos
+#         #selecciona linhas por defeito novoX = dataset.X[mask]
+#         #portanto tenho que por novoX = dataset.X[:,mask] - a virgula e ":"
+#         #obrigatorio retornar o novo dataset
+#         return Dataset(novoX, dataset.y, features)
+#     #y antigo, features é uma lista de strings
+#     #com lista não posso fazer seleção de masks
+#     #então crio um array com a lista e seleciono outra vez com a mask
+#     #volto a passar então uma lista
+#
+#
+#
+# if__name__ =="__main__":
+# from si.data.dataset_aula import Dataset
+#
+# dataset = Dataset.from_random(100,10,2)
+# dataset.X[:, 0] = 0
+#
+# dataset = Dataset(X = np.array([[0.2.0.3],[0,1,4,3],[0,1,1,3]])), y = np.array #faltam coisas
+#
+# selector = VarianceThreshold(theshold = 0.1)
+# selector = selector.fit(dataset)
+# new_dataset = selector.transfom(dataset)
+# print(dataset.features)
+#
+#
+
+from ..statistics.sigmoid_function_aula import sigmoid_function
+
+class LogisticRegression:
+
+    def __init__(self, l2_penalty, alpha, max_iter):
+        self.l2_penalty = l2_penalty
+        self.alpha = alpha
+        self.max_iter = max_iter
+
+        self.theta = None
+        self.theta_zero = None
+
+
+    def fit(self, dataset):
+        # aplicar sigmoid_function é a diferença em relação ao logistic_regression
+        m, n = dataset.shape()
+
+        # initialize the model parameters
+        self.theta = np.zeros(n)
+        self.theta_zero = 0
+
+        # gradient descent
+        for i in range(self.max_iter):
+            # predicted y
+            y_pred = np.dot(dataset.X, self.theta) + self.theta_zero
+
+            #apply sigmoid function -----> diferença em relação ao ridge_regression
+            y_pred = sigmoid_function(y_pred)
+
+            # computing and updating the gradient with the learning rate
+            gradient = (self.alpha * (1 / m)) * np.dot(y_pred - dataset.y, dataset.X)
+
+            # computing the penalty
+            penalization_term = self.alpha * (self.l2_penalty / m) * self.theta
+
+            # updating the model parameters
+            self.theta = self.theta - gradient - penalization_term
+            self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.y)
+
+        return self
+
+    def predict(self, dataset):
+        #muda significativamente
+        prediction = sigmoid_function(np.dot(dataset.X, self.theta) + self.theta_zero)
+        mask = prediction #está incorreto
+        prediction(mask) = 1
+        prediction(mask) = 0
+        return prediction
+
+    def score(self, dataset): #igual, muda a accuracy
+        y_pred = self.predict(dataset)
+        return accuracy(dataset.y, y_pred)
+
+    def cost(self, dataset):
+        #não quero o binário aqui
+        #o binario é só para ajustar a classificação
+        #não concluido, ver github FC
+        return
+
+#AVALIAÇÃO
+# pontos extra se opcional
+# não sou penalizada se não tiver opcional
+#
+
+import numpy as np
+from si.statistics.euclidean_distance import euclidean_distance
+
+
+class KNNClassifier:
+    def __init__(self, k, distance):
+        self.k = k
+        self.distance = distance
+        sef.dataset = None
+
+    def fit(self, dataset):
+        self.dataset = dataset
+        return self
+
+    def predict(self, dataset):
+        #escrever formula de distancia?
+        distances = self.distance(sample, self.dataset.X)
+        k_nearest_neighbors = np.argsort(distance)[:self.k]
+        k_nearest_neighbors_labels = self.dataset.y[k_nearest_neighbors]
+        labels, counts = np.unique(k_nearest_neighbors_labels, return_counts = True)
+        #return_counts para retornar segundo array
+        return labels[np.argmax(counts)]
+        #argsort pega em array, ordena-o por ordem crescente e dá indexes desses valores
+        #k exemplos mais semelhantes
+        #como escolho a classe mais comum?
+        # np.unique() - retorna array com contagens e valores unicos
+
+    def get_closest_label(self, sample):
+        distances = self.distance(sample, self.dataset.X)
+        k_nearest_neighbors = np.argsort(distance)[:self.k]
+        k_nearest_neighbors_labels = self.dataset.y[k_nearest_neighbors]
+        labels, counts = np.unique(k_nearest_neighbors_labels, return_counts = True)
+        return labels[np.argmax(counts)]
+
+    def predict(self, dataset):
+        return np.apply_along_axis(self._get_closest_label, axis = 1, arr = dataset.X)
+
+    def score(self,dataset):
+        #dataset_teste vai ter um y que têm labels, vai ser o true
+        #chamo o predict neste dataset
+        predictions = self.predict(dataset)
+        return accuracy(dataset.y, predictions)
+
+
+#avaliação - semelhantes mas para regressão (e não classificação)
+#accuracy é apenas para classes
+#distancia pode ser euclidean distance (dá para classificação e regressão)
+#iris é classificação, cpu é regressão
+#no ponto4, calculava a classe mais comum, aqui vamos usar a média, vamos ter valores continuos
+#
+
+
+class Dense:
+
+    def __init__(self, input_size, output_size):
+        self.input_size = input_size
+        self.output_size = output_size
+        #parâmetros da layer
+        #cada layer recebe pesos que multiplica pelos dados de input e adiciona bias para evitar overfitting
+        self.weights = np.randn(input_size, output_size) #so inicialização de matriz de pesos
+        #CONFIRMAR: randon? randn? não é random (ver github do fernando)
+        #self.weights contem todos os pesos da layer, vai ser sempre uma matriz
+        self.bias = np.zeros((1, output_size)) #apenas inicialização, pode tomar todos os valores que quiser
+        #adiciono um bias por cada output
+        #npzeros continua a ser uma matriz que tem uma linha e tem output_size, neste caso tres
+
+    def forward_propagation(self, input_data: np.array):
+        return np.dot(input_data, self.weights) + self.bias
+    #npdot por defeito faz multiplicação de matrizes
+    #já demos em varias aulas para multiplicar vectores por matrizes
+    #quando se passa um vector é que tem de se escolher axis em que se faz multiplicação
+
+    #input_size tem ou não quer ser igual ao numero de features do dataset (colunas)?
+    #sim, uma das regras de multiplicação de matrizes:
+    #nr de colunas da segunda matriz igual ao nr de linhas da primeira
+
+    #neste metodo, multiplico matriz de pesos pela matriz de input_data
+
+
+
+class SigmoidActivation:
+
+    def __init__(self):
+        pass
+        #função estática, não tem parâmetros, não calcula nada de forma diferente, igual em todos os casos
+        #só tem de receber um input
+
+    def forward(self, input_data): #retorna um np.array
+        return 1/(1+ np.exp(-input_data))
+        # para fazer ativação, assumindo que é uma layer
+
+
+
+class NN:
+
+    def __init__(self, layers):
+        self.layers = layers #parâmetros
+        #este modelo não tem atributos
+        #vamos receber dados input, multiplicar, avançar, multiplicar, avançar
+
+        #pode ser lista, as listas são ordenadas
+        #podia ser um tuplo, tb são ordenados
+        #a ordem interessa
+
+    #qual a API que todos os modelos que definimos têm? FIT
+
+    def fit(self, dataset): #retorna-se a ele próprio (NN)
+        #fit treina o modelo com o dataset
+        #iteramos cada camada e fazemos tais multiplicações que ja estão implementadas no forward
+        x = dataset.X #o correto é criar aqui uma cópia para não alterar o dataset.X
+        for layer in self.layers:
+            x = layer.forward(x)
+            #não poderia por layer.forward(dataset.X) senão estaria sempre a calcular nos dados iniciais
+            #em python tudo são pointers, não cria uma cópia, sempre que estou a alterar o x, estou a alterar dataset.X
+
+
+#slide SEIS
+#quantas layers temos? duas layers
+#de que tipo? dense layers, todos os nós totalmente conectados
+#qual o input_size da primeira layers? dois (o +1 é o bias)
+#qual o output_size da primeira layer? liga-se a dois nós na seguinte
+#l1 = Dense(input_size = 2, output_size = ...)
+#l2 = Dense (
+#o output size da primeira layer, tem a segunda layer input size igual a essa
+#tem que bater certo porque estamos a fazer multiplicação de matrizes
+#de cada dense para cada dense temos uma sigmoid activation
+#temos que criar as denses de sigmoid activation
+#l1_sg = SigmoidActivation()
+#l2_sg = SigmoidActivation()
+#como defino agora o nosso modelo? o que meto? layers?
+#nn_model = NN(layers(l1,l1_sg, l2, l2_sg))
+#nn_model.fit(dataset)
+#nn_model.predict #vemos na próxima aula
+#apesar de ver nos exemplos que dense layers estao totalmente conectadas, têm sempre de sofrer ativação para passar para a proxima layer
+
+
+#AVALIAÇÃO - talvez mais fácil fazer na próxima semana
+#iris dataset é um problema de multiclasse, esta nova softmaxactivation é importante para este tipo de problema
+#calcula a probibilidade de ocorência de cada uma das ocorrências
+#enquanto a sigmoid só da zero e um e...
+
+#ReLu ignora a parte negativa do x, dá os positivos
+
+#os exercicios seguintes = o que fizemos na parte final (criar configuração com a tipologia do modelo) - jupyter, por ex
+#ter 3 classes influencia ...
+#é tudo crtC+V com algumas coisas a mudar, conforme tipo de problema
+#ultimo deve acabar com uma ativação linear, nos não demos aqui nenhuma layer de activação linear
+#considerem o que é um modelo linear, como implementar forward de todas as nossas layers
+
+#AULA 28.11
+#aceita uma função que vai calcular, por ex
+#soma dos quadrados dos erros ou outra
+#ou podem adicionar metrica de erro por defeito (a mse)
+#mais argumentos para o init?
+#duvidas na lost function?
+#fx em python são objetos
+
+#def __init__(self, layers, epochs, learning_rate, loss, loss_derivate, verbose)
+#atributos: self.history #guardo resultados (custo, erro ou outra coisa qualquer, diferença previstos / reais) para cada epoch
+
+#o fit até agora fazia o backward propagation
+#para cada layer, recebo na primeira o dataset de treino com features e exemplos
+#passo à primeira layer, faz forward e no forward o que tinhamos implementado?
+#substituimos o x para passar ao seguinte
+
+#no backward propagation, espero que o forward acabe e depois? calculo o custo e alteramos os pesos anteriores
+#nenhuma das nossas layers tem backward propagation
+#fazemos isso quantas vezes? andar para frente, vejo o erro, ando para tras ---- nr de epochs que quero
+#ciclo for com nr de epochs for epoch in range(1, self.epochs = 1)
+#antes eu extraio o x e o y, mas só por conveniência, podia usar dataset.X e dataset.Y ao longo do algoritmo
+
+#primeira iteraçao, primeiro passo é forward propagation (esta parte já tinhamos), o que fazemos a seguir?
+#calculamos o custo e fazemos a backward propagation
+#temos que usar a derivada da lost function
+#para calcular o erro ou os pesos e atualizar e fazer backward propagation, tenho que fazer fx composta e derivar isso
+#vamos lá na próxima aula
+#depois vamos pegar no erro para cada exemplo e vamos passá-lo ao nosso backward
+
+#esta diferença entre previstos e reais, usamos para atualizar os nossos pesos
+#se usassemos so a loss, obtinhamos um float
+#a nossa loss derivate vai dar para exemplo a diferença
+
+#calculamos o erro, pego na ultima layer, invertemos a nossa lista de layers, pego na ultima e chamo o nosso backward erro e self.learning rate
+#temos que ir a todas as layers e adicionar o nosso backward
+#neste momento só diz para retornar o erro, porque vamos implementar isso na próxima aula
+
+#por ultimo, o que fazemos? calculamos o verdadeiro custo a cada iteração
+#mas daqui para baixo isto já nao importa para o treino, é só para perceber se estou a chegar ao minimom global nas primeiras 100 iterações
+#depois posso otimização o nr de epochs se vir que o erro nao se atualiza ao fim de 300, por exemplo, e assim poupo recursos ao meu computador
+
+#para aquela epoch guardo no meu dicionário - o que vai ter, por exemplo, na primeira iteração?
+#vai ter 1 e um valor de 0,78, por exemplo
+
+#por ultimo self.verbose e simplesmente faço um print para ter um nice output (isto é secundário)
+
+#predict novamente
+
+#esta avaliação fica para a próxima aula
+
+
